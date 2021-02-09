@@ -19,8 +19,12 @@
 ;;  `cilk_for') in `c-mode', `c++-mode', and derived modes.
 ;;
 ;;  Cilk keywords are fontified with the `font-lock-cilk-keyword-face'.  By
-;;  default, this is the same as the standard face except that the face color is
-;;  mustard (color hex: "#FDA900").
+;;  default, this is the same as the standard face except that its foreground
+;;  color is mustard (color hex: "#FDA900").
+;;
+;;  To customize the Cilk keyword face, use the `set-face-attribute' elisp
+;;  function.  For more information on face attributes, see:
+;;  https://www.gnu.org/software/emacs/manual/html_node/elisp/Face-Attributes.html.
 ;;
 ;;  Requires `cc-mode' package.
 ;;
@@ -33,14 +37,21 @@
 ;;
 ;;  ;; in ~/.doom.d/config.el
 ;;  (use-package! cc-fontify-cilk-keywords
-;;    :after cc-mode)
+;;    :after cc-mode
+;;    ;; optional customizations
+;;    :config (set-face-attribute 'font-lock-cilk-keyword-face nil
+;;                                :weight     'bold
+;;                                :foreground "#582A72"  ; purple
+;;                                ))
 ;;
 ;;; Code:
 
 (require 'cc-mode)
 
 (make-face 'font-lock-cilk-keyword-face)
-(set-face-foreground 'font-lock-cilk-keyword-face "#FDA900") ; mustard
+(set-face-attribute 'font-lock-cilk-keyword-face nil
+                    :foreground "#FDA900" ; mustard color
+                    )
 
 (defun cilk-keyword-fontification-hook ()
   "Apply custom font face to Cilk keywords."
