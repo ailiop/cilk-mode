@@ -6,3 +6,5 @@ Miscellaneous goodies for Cilk programming.
 
 - `cc-fontify-cilk-keywords.el`: fontification of Cilk keywords in C/C++ and
   derived modes
+- `flycheck-use-opencilk-clang.el`: flycheck C/C++ source linting with the
+  OpenCilk compiler
