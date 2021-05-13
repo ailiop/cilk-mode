@@ -6,10 +6,10 @@
 ;; Maintainer: Alexandros-Stavros Iliopoulos <1577182+ailiop@users.noreply.github.com>
 ;; Created: April 07, 2021
 ;; Modified: April 07, 2021
-;; Version: 0.0.1
+;; Version: 0.1.0
 ;; Keywords: Cilk, OpenCilk, clang, flycheck, lint, cc-mode
 ;; Homepage: https://github.com/ailiop/cilk-goodies
-;; Package-Requires: ((emacs "24.3"))
+;; Package-Requires: ((emacs "24.3") (cc-mode "5.33") (flycheck "31"))
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -37,26 +37,26 @@
 ;;
 ;;; Commentary:
 ;;
-;;  Enable Cilk-aware flycheck linting with the OpenCilk clang compiler.
+;;  Enable Cilk-aware flycheck with the OpenCilk clang compiler.
 ;;
 ;;  This package simply does the following:
-;;  - set the flycheck C/C++ clang executable to the OpenCilk clang compiler;
-;;  - set the `-fopencilk' flag; and
-;;  - add C/C++ mode hooks to instruct flycheck to use clang.
+;;  - set `flycheck-c/c++-clang-executable' to the OpenCilk `clang' compiler;
+;;  - add `-fopencilk' to `flycheck-clang-args'; and
+;;  - add C/C++ mode hooks to use the clang (OpenCilk) checker.
 ;;
 ;;  By default, the OpenCilk clang compiler executable is assumed to be
 ;;  `/usr/local/opencilk/bin/clang'.  To change this, set the variable
 ;;  `flycheck-c/c++-clang-executable' to point to the OpenCilk clang executable.
 ;;
-;;  (In the future, a custom `c/c++-opencilk' flycheck checker may be used,
-;;  instead of the already-existing `c/c++-clang' checker.)
+;;  In the future, a custom `c/c++-opencilk' flycheck checker may be used,
+;;  instead of the already-existing `c/c++-clang' checker.
 ;;
 ;;  Requires packages: `flycheck', `cc-mode'.
 ;;
 ;;; Using with vanilla Emacs:
 ;;
 ;;  ;; ===== .emacs =====
-;;  ;; (assume that `flycheck.el' and `cc-mode.el' can be found via the `load-path')
+;;  ;; (assume that `flycheck.el' and `cc-mode.el' can be found via `load-path')
 ;;  (add-to-list 'load-path "/path/to/parent/of/flycheck-use-opencilk-clang.el")
 ;;  (require 'flycheck-use-opencilk-clang)
 ;;  ;; [optional] OpenCilk compiler (default: /usr/local/opencilk/bin/clang)

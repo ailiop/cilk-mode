@@ -6,10 +6,10 @@
 ;; Maintainer: Alexandros-Stavros Iliopoulos <1577182+ailiop@users.noreply.github.com>
 ;; Created: January 26, 2021
 ;; Modified: March 31, 2021
-;; Version: 0.0.1
+;; Version: 0.1.0
 ;; Keywords: Cilk, fontification, cc-mode
 ;; Homepage: https://github.com/ailiop/cilk-goodies
-;; Package-Requires: ((emacs "24.3"))
+;; Package-Requires: ((emacs "24.3") (cc-mode "5.33"))
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -87,10 +87,13 @@
                     :foreground "#FDA900" ; mustard color
                     )
 
+;; To get the optimized regexp that matches Cilk keywords, evaluate:
+;; (regexp-opt '("cilk_for" "cilk_spawn" "cilk_sync") 'symbols)
+
 (defun cilk-keyword-fontification-hook ()
   "Apply custom Cilk font face to Cilk keywords."
   (font-lock-add-keywords
-   nil
+   nil                                  ; only apply to current buffer
    '(("\\_<\\(cilk_\\(?:for\\|s\\(?:pawn\\|ync\\)\\)\\)\\_>"
       . 'font-lock-cilk-keyword-face))))
 
