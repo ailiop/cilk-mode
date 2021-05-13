@@ -45,7 +45,7 @@
 ;;  - add C/C++ mode hooks to instruct flycheck to use clang.
 ;;
 ;;  By default, the OpenCilk clang compiler executable is assumed to be
-;;  `/opt/opencilk/bin/clang++'.  To change this, set the variable
+;;  `/usr/local/opencilk/bin/clang'.  To change this, set the variable
 ;;  `flycheck-c/c++-clang-executable' to point to the OpenCilk clang executable.
 ;;
 ;;  (In the future, a custom `c/c++-opencilk' flycheck checker may be used,
@@ -59,8 +59,8 @@
 ;;  ;; (assume that `flycheck.el' and `cc-mode.el' can be found via the `load-path')
 ;;  (add-to-list 'load-path "/path/to/parent/of/flycheck-use-opencilk-clang.el")
 ;;  (require 'flycheck-use-opencilk-clang)
-;;  ;; OpenCilk clang++ compiler (default: /opt/opencilk/bin/clang++)
-;;  (setq flycheck-c/c++-clang-executable "/my/path/to/opencilk/clang++")
+;;  ;; [optional] OpenCilk compiler (default: /usr/local/opencilk/bin/clang)
+;;  (setq flycheck-c/c++-clang-executable "/my/path/to/opencilk/clang")
 ;;  ;; other, optional customizations to `flycheck-clang-xxxxxxxx' variables...
 ;;
 ;;; Installing and using with Doom Emacs:
@@ -75,7 +75,7 @@
 ;;    :after (flycheck cc-mode)
 ;;    ;; optional customization
 ;;    :config
-;;    (setq flycheck-c/c++-clang-executable "/my/path/to/opencilk/clang++")
+;;    (setq flycheck-c/c++-clang-executable "/my/path/to/opencilk/clang")
 ;;    )
 ;;
 ;;; Code:
@@ -83,8 +83,8 @@
 (require 'flycheck)
 (require 'cc-mode)
 
-(setq flycheck-c/c++-clang-executable "/opt/opencilk/bin/clang++")
-(setq flycheck-clang-args             '("-fopencilk"))
+(setq flycheck-c/c++-clang-executable "/usr/local/opencilk/bin/clang")
+(add-to-list 'flycheck-clang-args "-fopencilk")
 
 (defun flycheck-set-checker-to-c/c++-clang ()
   "Set the `flycheck-checker' variable to `c/c++-clang'."
