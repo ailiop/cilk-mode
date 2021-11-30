@@ -61,7 +61,6 @@ It is up to the user to ensure that LSP mode for C/C++ is set to use the
 Add the following to your `.emacs` file:
 
 ``` emacs-lisp
-;; load package
 (add-to-list 'load-path "/path/to/cilk-mode-parent-dir")
 (require 'cilk-mode)
 ```
@@ -107,7 +106,7 @@ In your `.emacs` file:
 (require 'cilk-mode)
 
 ;; automatically enable cilk-mode within c-mode or c++-mode
-(dolist (h '('c-mode 'c++-mode))
+(dolist (h '('c-mode-hook 'c++-mode-hook))
   (add-hook h #'cilk-mode))
   
 ;; customize Cilk keyword face
