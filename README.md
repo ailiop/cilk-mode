@@ -19,7 +19,7 @@ Toggled with the function `cilk-mode-cc-keywords`.
 
 | ![](screenshots/cilk-mode-example_cc-off_font-off_flycheck-on.png) | ![](screenshots/cilk-mode-example_cc-on_font-off_flycheck-on.png) |
 |:------------------------------------------------------------------:|:-----------------------------------------------------------------:|
-| default indentation in `c-mode`                                    | after `cilk-mode-cc-keywords`                                     |
+| in `c-mode`, before `cilk-mode-cc-keywords`                        | after `cilk-mode-cc-keywords`                                     |
 
 ### Custom font-lock face for Cilk keyword highlighting
 
@@ -39,7 +39,7 @@ Toggled with the function `cilk-mode-flycheck-opencilk`.  The path to the
 
 | ![](screenshots/cilk-mode-example_cc-on_font-on_flycheck-off.png) | ![](screenshots/cilk-mode-example_cc-on_font-on_flycheck-on.png) |
 |:-----------------------------------------------------------------:|:----------------------------------------------------------------:|
-| `cilk-mode-flycheck-opencilk`                                     | after `cilk-mode-flycheck-opencilk`                              |
+| before `cilk-mode-flycheck-opencilk`                                     | after `cilk-mode-flycheck-opencilk`                              |
 
 ### LSP mode with OpenCilk
 

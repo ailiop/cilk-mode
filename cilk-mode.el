@@ -95,7 +95,7 @@
 ;; (setq cilk-mode-enable-flycheck-opencilk nil)    ; disable flycheck options
 ;;
 ;; ; load package and enable Cilk mode in all C/C++ (or derived) buffers
-;; (require 'cilk-mode)
+;; (require 'cilk-mode) ; assumes cilk-mode.el is in the load-path
 ;; (dolist (h '('c-mode-hook c++-mode-hook))
 ;;   (add-hook h #'cilk-mode))
 ;;
