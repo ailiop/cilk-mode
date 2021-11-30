@@ -9,7 +9,7 @@
 ;; Version: 0.1.0
 ;; Keywords: c convenience faces languages
 ;; Homepage: https://github.com/ailiop/cilk-mode
-;; Package-Requires: ((emacs "25.1") (flycheck "32-cvs") (lsp-mode "8.0"))
+;; Package-Requires: ((emacs "25.1") (flycheck "32-cvs"))
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -62,12 +62,6 @@
 ;; installed, this feature is elided.  The OpenCilk compiler path is
 ;; found in `cilk-mode-flycheck-opencilk-executable'.
 ;;
-;; 4. Easy setup for `lsp-mode' integration using the OpenCilk clangd language
-;; server.  This is done simply via a buffer-local binding of
-;; `lsp-clients-clangd-executable'.  It is up to the user to ensure that
-;; `lsp-mode' is activated in the relevant buffer, as well as to ensure that
-;; it uses clangd.  If `lsp-mode' is not installed, this feature is elided.
-;;
 ;; Each of the above features is enabled/disabled via hook functions for
 ;; `cilk-mode'.  To disable any of the feature hook functions, set the value
 ;; of the corresponding variable below to `nil' BEFORE loading the package:
@@ -78,8 +72,6 @@
 ;;      -> hook function `cilk-mode-font-lock'
 ;; 3. flag `cilk-mode-enable-flycheck-opencilk'
 ;;      -> hook function `cilk-mode-flycheck-opencilk'
-;; 4. flag `cilk-mode-enable-lsp-opencilk'
-;;      -> hook function `cilk-mode-lsp-opencilk'
 ;;
 ;; Each of the hook functions above can also be called interactively (in any
 ;; mode) to toggle the corresponding feature.
@@ -163,15 +155,11 @@
 
 ;; ---------- OpenCilk
 
-(defcustom cilk-mode-opencilk-dir "/opt/opencilk"
-  "Installation directory for the OpenCilk compiler.
+(defcustom cilk-mode-opencilk-executable "/opt/opencilk/bin/clang"
+  "Path to the OpenCilk compiler clang executable.
 
-This is used as the base path for finding the OpenCilk C/C++
-compiler (`cilk-mode-flycheck-opencilk-executable') and language
-server daemon (`cilk-mode-lsp-clients-opencilk-executable'), ONLY
-IF the corresponding variables are not set before loading the
-`cilk-mode' package."
-  :type 'directory)
+This is used as the syntax checker for `flycheck-mode'."
+  :type '(file :must-match t))
 
 
 (defcustom cilk-mode-opencilk-cilk-flags '("-fopencilk")
@@ -342,15 +330,6 @@ to `cilk-mode-hook'."
   (declare-function flycheck-buffer "flycheck.el" nil)
 
 
-  (defcustom cilk-mode-flycheck-opencilk-executable
-    (expand-file-name "clang" (expand-file-name "bin/" cilk-mode-opencilk-dir))
-    "The executable of the OpenCilk syntax checker (i.e., compiler).
-
-The value of `cilk-mode-flycheck-opencilk-executable' replaces
-that of `flycheck-c/c++-clang-executable' in `cilk-mode' buffers."
-    :type '(file :must-match t))
-
-
   (declare-function cilk-mode-flycheck-opencilk "cilk-mode.el")
   (let ((cilk-mode--flycheck-opencilk-state nil))
 
@@ -377,7 +356,7 @@ the above flycheck options between the OpenCilk and original settings."
         (if cilk-mode--flycheck-opencilk-state
             (progn
               (setq-local flycheck-c/c++-clang-executable
-                          cilk-mode-flycheck-opencilk-executable)
+                          cilk-mode-opencilk-executable)
               (setq-local flycheck-clang-args
                           (append flycheck-clang-args
                                   cilk-mode-opencilk-cilk-flags))
@@ -387,66 +366,6 @@ the above flycheck options between the OpenCilk and original settings."
           (kill-local-variable 'flycheck-checker))
         (when (bound-and-true-p flycheck-mode)
           (flycheck-buffer))))))
-
-
-
-;; ==================================================
-;;; OPENCILK WITH LSP-MODE
-;; ==================================================
-
-(defcustom cilk-mode-enable-lsp-opencilk (require 'lsp-mode nil 'noerror)
-  "If non-nil, use the OpenCilk language server as the `lsp-mode' clangd client.
-
-This variable is only checked when the `cilk-mode' package is
-loaded, to control whether to add `cilk-mode-lsp-opencilk' to the
-`cilk-mode' on/off hooks (partially evaluated with t/nil
-input)."
-  :type 'boolean)
-
-
-;; in case `cilk-mode-enable-lsp-opencilk' was pre-set to non-nil value
-(when cilk-mode-enable-lsp-opencilk (require 'lsp-mode))
-
-
-(when (require 'lsp-mode nil 'noerror)
-
-
-  (defvar lsp-mode)
-  (defvar lsp-clients-clangd-executable)
-
-
-  (defcustom cilk-mode-lsp-clients-opencilk-executable
-    (expand-file-name "clangd" (expand-file-name "bin/" cilk-mode-opencilk-dir))
-    "The executable of the OpenCilk language server.
-
-The value of `cilk-mode-lsp-clients-opencilk-executable' replaces
-that of `lsp-clients-clangd-executable' in `cilk-mode' buffers."
-    :type '(file :must-match t))
-
-
-  (declare-function cilk-mode-lsp-opencilk "cilk-mode.el")
-  (let ((cilk-mode--lsp-opencilk-state nil))
-
-    (defun cilk-mode-lsp-opencilk (&optional flag)
-      "Toggle OpenCilk as the LSP clangd client.
-
-If FLAG is nil (equivalently, if no FLAG is specified), set the
-OpenCilk language server as the LSP clangd client executable.
-
-If FLAG is non-nil, restore the LSP clangd client executable to
-its original value (if `cilk-mode-lsp-opencilk' was run before).
-
-When called interactively, `cilk-mode-lsp-opencilk' toggles the
-LSP clangd client executable value between the OpenCilk and
-original settings."
-      (interactive)
-      (if (called-interactively-p 'any)
-          (cilk-mode-lsp-opencilk cilk-mode--lsp-opencilk-state)
-        (setq cilk-mode--lsp-opencilk-state (not flag))
-        (if cilk-mode--lsp-opencilk-state
-            (setq-local lsp-clients-clangd-executable
-                        cilk-mode-lsp-clients-opencilk-executable)
-          (kill-local-variable 'lsp-clients-clangd-executable))))))
 
 
 
@@ -469,8 +388,7 @@ set (at package initialization time):
 
 1. `cilk-mode-cc-keywords'       (flag: `cilk-mode-enable-cc-keywords')
 2. `cilk-mode-font-lock'         (flag: `cilk-mode-enable-font-lock')
-3. `cilk-mode-flycheck-opencilk' (flag: `cilk-mode-enable-flycheck-opencilk')
-4. `cilk-mode-lsp-opencilk'      (flag: `cilk-mode-enable-lsp-opencilk')"
+3. `cilk-mode-flycheck-opencilk' (flag: `cilk-mode-enable-flycheck-opencilk')"
   :lighter " Cilk"
   (when (and (bound-and-true-p c-buffer-is-cc-mode)
              (member major-mode '('c-mode 'c++-mode)))
@@ -489,11 +407,6 @@ set (at package initialization time):
            (fboundp 'cilk-mode-flycheck-opencilk))
   (add-hook 'cilk-mode-hook
             (lambda () (cilk-mode-flycheck-opencilk (not cilk-mode)))))
-
-(when (and cilk-mode-enable-lsp-opencilk
-           (fboundp 'cilk-mode-lsp-opencilk))
-  (add-hook 'cilk-mode-hook
-            (lambda () (cilk-mode-lsp-opencilk (not cilk-mode)))))
 
 
 (provide 'cilk-mode)

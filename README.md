@@ -41,18 +41,6 @@ Toggled with the function `cilk-mode-flycheck-opencilk`.  The path to the
 |:-----------------------------------------------------------------:|:----------------------------------------------------------------:|
 | before `cilk-mode-flycheck-opencilk`                                     | after `cilk-mode-flycheck-opencilk`                              |
 
-### LSP mode with OpenCilk
-
-Toggled with the function `cilk-mode-lsp-opencilk`.  This simply sets the
-variable `lsp-clients-clangd-executable` to the
-[OpenCilk](https://opencilk.org) language server in the current buffer.  The
-path to the OpenCilk language server can be set via
-`cilk-mode-lsp-clients-opencilk-executable`.  This feature requires the
-`lsp-mode` package and works with the `lsp-mode` minor mode.
-
-It is up to the user to ensure that LSP mode for C/C++ is set to use the
-`clangd` language server (instead of `ccls`).
-
 
 ## Installation
 
@@ -96,10 +84,9 @@ In `.doom.d/packages.el`:
 In your `.emacs` file:
 
 ``` emacs-lisp
-;; customize OpenCilk directory and enabled hooks
+;; customize automatically-enabled hooks in cilk-mode
 ;; (must be done before loading the package)
-(setq cilk-mode-opencilk-dir "~/opencilk/build")
-(setq cilk-mode-enable-lsp-opencilk nil)
+(setq cilk-mode-enable-flycheck-opencilk nil)
 
 ;; load package
 (add-to-list 'load-path "/path/to/cilk-mode-parent-dir") ; if necessary
@@ -114,6 +101,9 @@ In your `.emacs` file:
                     :weight 'bold
                     :foreground (face-attribute 'font-lock-keyword-face
                                                 :foreground))
+                                                
+;; customize path to the OpenCilk compiler (for use with flycheck)
+(setq cilk-mode-opencilk-executable "/opt/opencilk/bin/clang")
 ```
 
 ### Doom Emacs
@@ -124,13 +114,13 @@ In `.doom.d/config.el`:
 (use-package! cilk-mode
   :command cilk-mode
   :init
-  (setq cilk-mode-opencilk-dir "~/opencilk/build"
-        cilk-mode-enable-lsp-opencilk nil)
+  (setq cilk-mode-enable-flycheck-opencilk nil)
   :config
   (set-face-attribute 'cilk-mode-parallel-keyword nil
                       :weight 'bold
                       :foreground (face-attribute 'font-lock-keyword-face
-                                                  :foreground)))
+                                                  :foreground))
+  (setq cilk-mode-opencilk-executable "/opt/opencilk/bin/clang"))
 
 (add-hook! (c-mode c++-mode) #'cilk-mode)
 ```
