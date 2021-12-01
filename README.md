@@ -9,9 +9,10 @@ By default, all of the features below are added to `cilk-mode-hook`;
 activating `cilk-mode` in a buffer with major mode derived from `c-mode` or
 `c++-mode` will enable all features.
 
-To prevent feature with function `cilk-mode-<feature>` from being toggled
-automatically in `cilk-mode`, set the variable `cilk-mode-enable-<feature>` to
-`nil` *before* loading the `cilk-mode.el` package.
+To prevent a feature with corresponding function `cilk-mode-<feature>` from
+being toggled automatically in `cilk-mode`, set the variable
+`cilk-mode-enable-<feature>` to `nil` *before* loading the `cilk-mode.el`
+package.
 
 ### Correct indentation with Cilk keywords in CC Mode 
 
@@ -24,7 +25,9 @@ Toggled with the function `cilk-mode-cc-keywords`.
 ### Custom font-lock face for Cilk keyword highlighting
 
 Toggled with the function `cilk-mode-font-lock`.  Cilk keywords are fontified
-with the `cilk-mode-parallel-keyword` face.
+with the `cilk-mode-parallel-keyword` face.  By default, the latter is the
+same as `font-lock-keyword-face` but can be customized without affecting the
+"regular" C/C++ keywords.
 
 | ![](screenshots/cilk-mode-example_cc-on_font-off_flycheck-on.png) | ![](screenshots/cilk-mode-example_cc-on_font-on_flycheck-on.png) |
 |:-----------------------------------------------------------------:|:----------------------------------------------------------------:|
@@ -92,15 +95,13 @@ In your `.emacs` file:
 (add-to-list 'load-path "/path/to/cilk-mode-parent-dir") ; if necessary
 (require 'cilk-mode)
 
-;; automatically enable cilk-mode within c-mode or c++-mode
+;; automatically enable cilk-mode within c-mode and c++-mode
 (dolist (h '('c-mode-hook 'c++-mode-hook))
   (add-hook h #'cilk-mode))
   
 ;; customize Cilk keyword face
 (set-face-attribute 'cilk-mode-parallel-keyword nil
-                    :weight 'bold
-                    :foreground (face-attribute 'font-lock-keyword-face
-                                                :foreground))
+                    :foreground "#FDA900") ; mustard color
                                                 
 ;; customize path to the OpenCilk compiler (for use with flycheck)
 (setq cilk-mode-opencilk-executable "/opt/opencilk/bin/clang")
@@ -117,9 +118,7 @@ In `.doom.d/config.el`:
   (setq cilk-mode-enable-flycheck-opencilk nil)
   :config
   (set-face-attribute 'cilk-mode-parallel-keyword nil
-                      :weight 'bold
-                      :foreground (face-attribute 'font-lock-keyword-face
-                                                  :foreground))
+                      :foreground "#FDA900") ; mustard color
   (setq cilk-mode-opencilk-executable "/opt/opencilk/bin/clang"))
 
 (add-hook! (c-mode c++-mode) #'cilk-mode)
