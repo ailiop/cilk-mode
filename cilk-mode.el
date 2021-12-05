@@ -146,53 +146,56 @@ loaded, to control whether to add `cilk-mode-cc-keywords' to
 (declare-function cilk-mode-cc-keywords "cilk-mode.el")
 (let ((cilk-mode--cc-keywords-state nil)) ; t/nil if feature is on/off
 
-  (defun cilk-mode-cc-keywords (&optional flag)
-    "Toggle Cilk keywords in CC Mode keyword regexps.
+  (defun cilk-mode-cc-keywords (&optional arg)
+    "Toggle Cilk keyword indentation via CC Mode keyword regexps.
 
-If FLAG is nil (equivalently, if no FLAG is specified), update CC
-Mode keyword-matching regexps to also match relevant Cilk
-keywords.  Specifically, change the following CC Mode regexp
-variables for `c-mode' and `c++-mode':
+Cilk keyword indentation is enabled by changing the following CC
+Mode regexp variables for `c-mode' and `c++-mode':
 
 o `c-block-stmt-1-key' ==> also keywords in `cilk-mode--block-stmt-1-kwds'
 o `c-block-stmt-2-key' ==> also keywords in `cilk-mode--block-stmt-2-kwds'
 o `c-opt-block-stmt-key' ==> (update based on the 2 variables above)
 o `c-simple-stmt-key' ==> also keywords in `cilk-mode-simple-stmt-kwds'
 
-If FLAG is non-nil, undo the above changes and set the CC Mode
-regexp variables to their original values.
-
-When called interactively, `cilk-mode-cc-keywords' toggles the CC
-Mode keyword regexp variables between the OpenCilk and original
-settings.
+If called interactively, enable Cilk keyword indentation with CC
+Mode if prefix argument ARG is positive, and disable it if ARG is
+zero or negative; if no prefix argument is given, toggle Cilk
+keyword indentation.  If called from Lisp, also enable Cilk
+keyword indentation if ARG is omitted or nil, and toggle it if
+ARG is `toggle'; disable it otherwise.
 
 This function should only be called from buffers where the major
 mode is `c-mode' or `c++-mode'."
-    (interactive)
-    (if (called-interactively-p 'any)
-        ;; interactive call: toggle
-        (cilk-mode-cc-keywords cilk-mode--cc-keywords-state)
-      ;; only proceed if input `flag' will toggle the feature
-      (when (xor cilk-mode--cc-keywords-state (not flag))
-        (setq cilk-mode--cc-keywords-state (not flag))
-        (setq c-block-stmt-1-key
-              (c-make-keywords-re t
-                (append (c-lang-const c-block-stmt-1-kwds)
-                        (unless flag cilk-mode--block-stmt-1-kwds))))
-        (setq c-block-stmt-2-key
-              (c-make-keywords-re t
-                (append (c-lang-const c-block-stmt-2-kwds)
-                        (unless flag cilk-mode--block-stmt-2-kwds))))
-        (setq c-opt-block-stmt-key
-              (c-make-keywords-re t
-                (append (c-lang-const c-block-stmt-1-kwds)
-                        (c-lang-const c-block-stmt-2-kwds)
-                        (unless flag (append cilk-mode--block-stmt-1-kwds
-                                             cilk-mode--block-stmt-2-kwds)))))
-        (setq c-simple-stmt-key
-              (c-make-keywords-re t
-                (append (c-lang-const c-simple-stmt-kwds)
-                        (unless flag cilk-mode--simple-stmt-kwds))))))))
+    (interactive "p")
+    ;; input `arg': <not input>
+    (unless arg
+      (if (called-interactively-p 'any)
+          (setq arg 'toggle)  ; interactive: (arg == nil) --> toggle
+        (setq arg 1)))        ; non-interactive: (arg == nil) --> enable
+    ;; input `arg': toggle
+    (when (eq arg 'toggle)
+      (cilk-mode-cc-keywords cilk-mode--cc-keywords-state))
+    ;; input `arg': enable/disable (only do anything if actually toggling)
+    (when (xor cilk-mode--cc-keywords-state (not arg))
+      (setq cilk-mode--cc-keywords-state (not arg))
+      (setq c-block-stmt-1-key
+            (c-make-keywords-re t
+              (append (c-lang-const c-block-stmt-1-kwds)
+                      (unless arg cilk-mode--block-stmt-1-kwds))))
+      (setq c-block-stmt-2-key
+            (c-make-keywords-re t
+              (append (c-lang-const c-block-stmt-2-kwds)
+                      (unless arg cilk-mode--block-stmt-2-kwds))))
+      (setq c-opt-block-stmt-key
+            (c-make-keywords-re t
+              (append (c-lang-const c-block-stmt-1-kwds)
+                      (c-lang-const c-block-stmt-2-kwds)
+                      (unless arg (append cilk-mode--block-stmt-1-kwds
+                                          cilk-mode--block-stmt-2-kwds)))))
+      (setq c-simple-stmt-key
+            (c-make-keywords-re t
+              (append (c-lang-const c-simple-stmt-kwds)
+                      (unless arg cilk-mode--simple-stmt-kwds)))))))
 
 
 
@@ -227,36 +230,43 @@ loaded, to control whether to add `cilk-mode-font-lock' to
 (declare-function cilk-mode-font-lock "cilk-mode.el")
 (let ((cilk-mode--font-lock-state nil)) ; t/nil if feature is on/off
 
-  (defun cilk-mode-font-lock (&optional flag)
+  (defun cilk-mode-font-lock (&optional arg)
     "Toggle Cilk keyword fontification in current buffer.
 
-If FLAG is nil (equivalently, if no FLAG is specified), apply the
-`cilk-mode-parallel-keyword' face to all Cilk keywords (found in
-`cilk-mode--all-kwds').
+Cilk keywords are fontified by applying the
+`cilk-mode-parallel-keyword' face to all Cilk keywords.
+(Recognized Cilk keywords can be seen in `cilk-mode--all-kwds'.)
 
-If flag is non-nil, remove the face.
-
-When called interactively, `cilk-mode-font-lock' toggles the
-fontification of Cilk keywords in the current buffer."
-    (interactive)
-    (if (called-interactively-p 'any)
-        ;; interactive call: toggle
-        (cilk-mode-font-lock cilk-mode--font-lock-state)
-      ;; only proceed if the `flag' will toggle the feature
-      (when (xor cilk-mode--font-lock-state (not flag))
-        (setq cilk-mode--font-lock-state (not flag))
-        ;; add/remove custom face to/from Cilk keywords
-        ;; (NOTE: Use `font-lock-add-keywords' and `font-lock-remove-keywords'
-        ;; instead of the fontification mechanisms in `cc-mode', because the
-        ;; latter would seem to require copying an entire matcher like
-        ;; `c-cpp-matchers'.)
-        (let ((font-lock-cilk-keywords-list
-               `((,cilk-mode--cilk-keywords-regexp . 'cilk-mode-parallel-keyword))))
-          (funcall (if cilk-mode--font-lock-state
-                       #'font-lock-add-keywords
-                     #'font-lock-remove-keywords)
-                   nil font-lock-cilk-keywords-list))
-        (font-lock-flush)))))
+If called interactively, enable Cilk keyword fontification with
+if prefix argument ARG is positive, and disable it if ARG is zero
+or negative; if no prefix argument is given, toggle Cilk keyword
+fontification.  If called from Lisp, also enable Cilk keyword
+fontification if ARG is omitted or nil, and toggle it if ARG is
+`toggle'; disable it otherwise."
+    (interactive "p")
+    ;; input `arg': <not input>
+    (unless arg
+      (if (called-interactively-p 'any)
+          (setq arg 'toggle)  ; interactive: (arg == nil) --> toggle
+        (setq arg 1)))        ; non-interactive: (arg == nil) --> enable
+    ;; input `arg': toggle
+    (when (eq arg 'toggle)
+      (cilk-mode-font-lock cilk-mode--font-lock-state))
+    ;; input `arg': enable/disable (only do anything if actually toggling)
+    (when (xor cilk-mode--font-lock-state (not arg))
+      (setq cilk-mode--font-lock-state (not arg))
+      ;; add/remove custom face to/from Cilk keywords
+      ;; (NOTE: Use `font-lock-add-keywords' and `font-lock-remove-keywords'
+      ;; instead of the fontification mechanisms in `cc-mode', because the
+      ;; latter would seem to require copying an entire matcher like
+      ;; `c-cpp-matchers'.)
+      (let ((font-lock-cilk-keywords-list
+             `((,cilk-mode--cilk-keywords-regexp . 'cilk-mode-parallel-keyword))))
+        (funcall (if cilk-mode--font-lock-state
+                     #'font-lock-add-keywords
+                   #'font-lock-remove-keywords)
+                 nil font-lock-cilk-keywords-list))
+      (font-lock-flush))))
 
 
 
@@ -289,42 +299,49 @@ to `cilk-mode-hook'."
   (declare-function cilk-mode-flycheck-opencilk "cilk-mode.el")
   (let ((cilk-mode--flycheck-opencilk-state nil)) ; t/nil if feature is on/off
 
-    (defun cilk-mode-flycheck-opencilk (&optional flag)
-      "Toggle Cilk options for the `c/c++-clang' `flycheck' checker.
+    (defun cilk-mode-flycheck-opencilk (&optional arg)
+      "Toggle Cilk options for the `c/c++-clang' `flycheck' checker'.
 
-If FLAG is nil (equivalently, if no FLAG is specified), ensure
-the buffer-local `flycheck-checker' value is `c/c++-clang'.
-Also, create the following local bindings with values from the
-corresponding `cilk-mode' constants:
+Cilk C/C++ syntax checking with `flycheck-mode' in the current
+buffer is enabled by setting the buffer-local value of
+`flycheck-checker' to `c/c++-clang', and also creating
+buffer-local bindings for the following `flycheck' variables,
+using the values of the corresponding `cilk-mode' constants:
 
 o `flycheck-c/c++-clang-executable'  = `cilk-mode-flycheck-opencilk-executable'
 o `flycheck-clang-args'             += `cilk-mode-opencilk-cilk-flags'
 
-If FLAG is non-nil, delete the buffer-local bindings and undo the
-above options to their original setting.
-
-When called interactively, `cilk-mode-flycheck-opencilk' toggles
-the above flycheck options between the OpenCilk and original settings."
-      (interactive)
-      (if (called-interactively-p 'any)
-          ;; interactive call: toggle
-          (cilk-mode-flycheck-opencilk cilk-mode--flycheck-opencilk-state)
-        ;; only proceed if the input `flag' will toggle the feature
-        (when (xor cilk-mode--flycheck-opencilk-state (not flag))
-          (setq cilk-mode--flycheck-opencilk-state (not flag))
-          (if cilk-mode--flycheck-opencilk-state
-              (progn
-                (setq-local flycheck-c/c++-clang-executable
-                            cilk-mode-opencilk-executable)
-                (setq-local flycheck-clang-args
-                            (append flycheck-clang-args
-                                    cilk-mode-opencilk-cilk-flags))
-                (setq-local flycheck-checker 'c/c++-clang))
-            (kill-local-variable 'flycheck-c/c++-clang-executable)
-            (kill-local-variable 'flycheck-clang-args)
-            (kill-local-variable 'flycheck-checker))
-          (when (bound-and-true-p flycheck-mode)
-            (flycheck-buffer)))))))
+If called interactively, enable Cilk syntax checking in
+`flycheck-mode' if prefix argument ARG is positive, and disable
+it if ARG is zero or negative; if no prefix argument is given,
+toggle Cilk syntax checking.  If called from Lisp, also enable
+Cilk syntax checking if ARG is omitted or nil, and toggle it if
+ARG is `toggle'; disable it otherwise."
+      (interactive "p")
+      ;; input `arg': <not input>
+      (unless arg
+        (if (called-interactively-p 'any)
+            (setq arg 'toggle)  ; interactive: (arg == nil) --> toggle
+          (setq arg 1)))        ; non-interactive: (arg == nil) --> enable
+      ;; input `arg': toggle
+      (when (eq arg 'toggle)
+        (cilk-mode-flycheck-opencilk cilk-mode--flycheck-opencilk-state))
+      ;; input `arg': enable/disable (only do anything if actualy toggling)
+      (when (xor cilk-mode--flycheck-opencilk-state (not arg))
+        (setq cilk-mode--flycheck-opencilk-state (not arg))
+        (if cilk-mode--flycheck-opencilk-state
+            (progn
+              (setq-local flycheck-c/c++-clang-executable
+                          cilk-mode-opencilk-executable)
+              (setq-local flycheck-clang-args
+                          (append flycheck-clang-args
+                                  cilk-mode-opencilk-cilk-flags))
+              (setq-local flycheck-checker 'c/c++-clang))
+          (kill-local-variable 'flycheck-c/c++-clang-executable)
+          (kill-local-variable 'flycheck-clang-args)
+          (kill-local-variable 'flycheck-checker))
+        (when (bound-and-true-p flycheck-mode)
+          (flycheck-buffer))))))
 
 
 
