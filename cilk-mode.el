@@ -5,8 +5,8 @@
 ;; Author: Alexandros-Stavros Iliopoulos <https://github.com/ailiop>
 ;; Maintainer: Alexandros-Stavros Iliopoulos <1577182+ailiop@users.noreply.github.com>
 ;; Created: November 30, 2021
-;; Modified: November 30, 2021
-;; Version: 0.1.0
+;; Modified: December 7, 2021
+;; Version: 0.1.1
 ;; Keywords: c convenience faces languages
 ;; Homepage: https://github.com/ailiop/cilk-mode
 ;; Package-Requires: ((emacs "25.1") (flycheck "32-cvs"))
