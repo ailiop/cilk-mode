@@ -112,7 +112,7 @@
 (defcustom cilk-mode-opencilk-executable "/opt/opencilk/bin/clang"
   "Path to the OpenCilk compiler clang executable.
 
-This is used as the syntax checker for `flycheck-mode'."
+This is used as the syntax checker for flycheck."
   :type '(file :must-match t))
 
 
@@ -132,7 +132,7 @@ for use with flycheck, use `flycheck-clang-args'."
 (defcustom cilk-mode-enable-cc-keywords t
   "If non-nil, register Cilk keywords with CC Mode keyword regexps.
 
-This variable is only checked when the `cilk-mode' package is
+This variable is only checked when the cilk-mode.el package is
 loaded, to control whether to add `cilk-mode-cc-keywords' to
 `cilk-mode-hook'."
   :type 'boolean)
@@ -200,7 +200,7 @@ mode is `c-mode' or `c++-mode'."
 (defcustom cilk-mode-enable-font-lock (require 'font-lock nil 'noerror)
   "If non-nil, enable automatic Cilk keyword font-locking.
 
-This variable is only checked when the `cilk-mode' package is
+This variable is only checked when the cilk-mode.el package is
 loaded, to control whether to add `cilk-mode-font-lock' to
 `cilk-mode-hook'."
   :type 'boolean)
@@ -263,9 +263,9 @@ fontification if ARG is omitted or nil, and toggle it if ARG is
 ;; ==================================================
 
 (defcustom cilk-mode-enable-flycheck-opencilk (require 'flycheck nil 'noerror)
-  "If non-nil, enable Cilk syntax checking with `flycheck' in `cilk-mode'.
+  "If non-nil, enable Cilk syntax checking with `flycheck'.
 
-This variable is only checked when the `cilk-mode' package is
+This variable is only checked when the cilk-mode.el package is
 loaded, to control whether to add `cilk-mode-flycheck-opencilk'
 to `cilk-mode-hook'."
   :type 'boolean)
