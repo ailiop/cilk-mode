@@ -1,5 +1,9 @@
 # cilk-mode
 
+[![MELPA](https://melpa.org/packages/cilk-mode-badge.svg)](https://melpa.org/#/cilk-mode)
+[![MELPA Stable](https://stable.melpa.org/packages/cilk-mode-badge.svg)](https://stable.melpa.org/#/cilk-mode)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Emacs minor mode for Cilk source code editing.
 
 
@@ -56,19 +60,19 @@ Add the following to your `.emacs` file:
 (require 'cilk-mode)
 ```
 
-<!-- ### MELPA -->
+### MELPA
 
-<!-- Users of GNU Emacs (version 24.0 or greater) can install `cilk-mode` via -->
-<!-- [MELPA](https://melpa.org/#/getting-started).  To use the MELPA repository, -->
-<!-- make sure you have the following in your `.emacs` file: -->
+Users of GNU Emacs (version 24.1 or greater) can install `cilk-mode` via
+[MELPA](https://melpa.org/#/getting-started).  To use the MELPA repository,
+make sure you have the following in your `.emacs` file:
 
-<!-- ``` emacs-lisp -->
-<!-- (require 'package) -->
-<!-- (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t) -->
-<!-- (package-initialize) -->
-<!-- ``` -->
+``` emacs-lisp
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(package-initialize)
+```
 
-<!-- Then, run `M-x package-list-packages` to find and install `cilk-mode`. -->
+Then, run `M-x package-list-packages` to find and install `cilk-mode`.
 
 ### Doom Emacs
 
