@@ -47,14 +47,14 @@ Toggled with the function `cilk-mode-flycheck-opencilk`.  The path to the
 
 | ![](screenshots/cilk-mode-example_cc-on_font-on_flycheck-off.png) | ![](screenshots/cilk-mode-example_cc-on_font-on_flycheck-on.png) |
 |:-----------------------------------------------------------------:|:----------------------------------------------------------------:|
-| before `cilk-mode-flycheck-opencilk`                                     | after `cilk-mode-flycheck-opencilk`                              |
+| before `cilk-mode-flycheck-opencilk`                              | after `cilk-mode-flycheck-opencilk`                              |
 
 
 ## Installation
 
 ### Manual
 
-Add the following to your `.emacs` file:
+Download `cilk-mode.el` and add the following to your `.emacs` file:
 
 ``` emacs-lisp
 (add-to-list 'load-path "/path/to/cilk-mode-parent-dir")

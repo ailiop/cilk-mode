@@ -13,6 +13,7 @@
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
+
 ;;; License:
 ;;
 ;;  MIT License
@@ -35,6 +36,7 @@
 ;;  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 ;;  IN THE SOFTWARE.
 ;;
+
 ;;; Commentary:
 ;;
 ;; Provides `cilk-mode', a minor mode that augments `c-mode' and `c++-mode'
@@ -68,8 +70,9 @@
 ;; may also call the corresponding function interactively.
 ;;
 ;; The `cilk-mode' minor mode can only be enabled in buffers with major mode
-;; `c-mode' or `c++-mode' (provided by `cc-mode').
+;; `c-mode' or `c++-mode' (provided by CC Mode).
 ;;
+
 ;;; Code:
 
 
@@ -110,7 +113,7 @@
 ;; ---------- OpenCilk
 
 (defcustom cilk-mode-opencilk-executable "/opt/opencilk/bin/clang"
-  "Path to the OpenCilk compiler clang executable.
+  "Path to the OpenCilk compiler executable.
 
 This is used as the syntax checker for flycheck."
   :type '(file :must-match t))
