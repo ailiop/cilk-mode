@@ -9,14 +9,15 @@ Emacs minor mode for Cilk source code editing.
 
 ## Features
 
-By default, all of the features below are added to `cilk-mode-hook`;
-activating `cilk-mode` in a buffer with major mode derived from `c-mode` or
-`c++-mode` will enable all features.
+By default, all of the features below are activated/deactivated together with
+`cilk-mode`, which in turn can only be activated in a buffer with major mode
+derived from `c-mode` or `c++-mode`.
 
-To prevent a feature with corresponding function `cilk-mode-<feature>` from
-being toggled automatically in `cilk-mode`, set the variable
-`cilk-mode-enable-<feature>` to `nil` *before* loading the `cilk-mode.el`
-package.
+Each feature can also be toggled by calling its corresponding function, as
+listed below.  To prevent a feature with corresponding function
+`cilk-mode-<feature>` from being automatically enabled in `cilk-mode`, set the
+variable `cilk-mode-enable-<feature>` to `nil`.
+
 
 ### Correct indentation with Cilk keywords in CC Mode 
 
@@ -84,17 +85,13 @@ In `.doom.d/packages.el`:
 ```
 
 
-## Configuration
+## Configuration example
 
 ### GNU Emacs
 
 In your `.emacs` file:
 
 ``` emacs-lisp
-;; customize automatically-enabled hooks in cilk-mode
-;; (must be done before loading the package)
-(setq cilk-mode-enable-flycheck-opencilk nil)
-
 ;; load package
 (add-to-list 'load-path "/path/to/cilk-mode-parent-dir") ; if necessary
 (require 'cilk-mode)
@@ -106,9 +103,12 @@ In your `.emacs` file:
 ;; customize Cilk keyword face
 (set-face-attribute 'cilk-mode-parallel-keyword nil
                     :foreground "#FDA900") ; mustard color
-                                                
+
 ;; customize path to the OpenCilk compiler (for use with flycheck)
 (setq cilk-mode-opencilk-executable "/opt/opencilk/bin/clang")
+                                                
+;; do not enable flycheck with OpenCilk by default in cilk-mode
+(setq cilk-mode-enable-flycheck-opencilk nil)
 ```
 
 ### Doom Emacs
@@ -118,12 +118,11 @@ In `.doom.d/config.el`:
 ``` emacs-lisp
 (use-package! cilk-mode
   :command cilk-mode
-  :init
-  (setq cilk-mode-enable-flycheck-opencilk nil)
   :config
   (set-face-attribute 'cilk-mode-parallel-keyword nil
                       :foreground "#FDA900") ; mustard color
   (setq cilk-mode-opencilk-executable "/opt/opencilk/bin/clang"))
+  (setq cilk-mode-enable-flycheck-opencilk nil)
 
 (add-hook! (c-mode c++-mode) #'cilk-mode)
 ```
