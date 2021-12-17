@@ -5,8 +5,8 @@
 ;; Author: Alexandros-Stavros Iliopoulos <https://github.com/ailiop>
 ;; Maintainer: Alexandros-Stavros Iliopoulos <1577182+ailiop@users.noreply.github.com>
 ;; Created: November 30, 2021
-;; Modified: December 15, 2021
-;; Version: 0.2.0
+;; Modified: December 17, 2021
+;; Version: 0.2.1
 ;; Keywords: c convenience faces languages
 ;; Homepage: https://github.com/ailiop/cilk-mode
 ;; Package-Requires: ((emacs "25.1") (flycheck "32-cvs"))
@@ -376,7 +376,7 @@ unconditionally.
           (cilk-mode-flycheck-opencilk +1)))
     (cilk-mode-cc-keywords -1)
     (cilk-mode-font-lock -1)
-    (when (fboundp' cilk-mode-flycheck-opencilk)
+    (when (fboundp 'cilk-mode-flycheck-opencilk)
       (cilk-mode-flycheck-opencilk -1))))
 
 
