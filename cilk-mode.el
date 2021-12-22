@@ -362,8 +362,8 @@ unconditionally.
 2. `cilk-mode-font-lock'         (flag: `cilk-mode-enable-font-lock')
 3. `cilk-mode-flycheck-opencilk' (flag: `cilk-mode-enable-flycheck-opencilk')"
   :lighter " Cilk"
-  (when (and (bound-and-true-p c-buffer-is-cc-mode)
-             (member major-mode '('c-mode 'c++-mode)))
+  (unless (and (bound-and-true-p c-buffer-is-cc-mode)
+               (member major-mode '(c-mode c++-mode)))
     (error "Unsupported major mode `%s' for minor mode `cilk-mode'" major-mode))
   (if cilk-mode
       (progn
