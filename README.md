@@ -2,52 +2,76 @@
 
 [![MELPA](https://melpa.org/packages/cilk-mode-badge.svg)](https://melpa.org/#/cilk-mode)
 [![MELPA Stable](https://stable.melpa.org/packages/cilk-mode-badge.svg)](https://stable.melpa.org/#/cilk-mode)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Emacs minor mode for Cilk source code editing.
+
+### Contents
+
+  - [Features](#features)
+  - [Installation](#installation)
+  - [Configuration example](#configuration-example)
 
 
 ## Features
 
-By default, all of the features below are activated/deactivated together with
-`cilk-mode`, which in turn can only be activated in a buffer with major mode
-derived from `c-mode` or `c++-mode`.
+This package provides `cilk-mode`, a minor mode that can be activated in
+buffers with major mode `c-mode`, `c++-mode`, or derived modes. The
+`cilk-mode` minor mode enables the features listed in the following
+table and described below.
 
-Each feature can also be toggled by calling its corresponding function, as
-listed below.  To prevent a feature with corresponding function
-`cilk-mode-<feature>` from being automatically enabled in `cilk-mode`, set the
-variable `cilk-mode-enable-<feature>` to `nil`.
+| Feature                            | Function                      | Auto-enable variable                 |
+|:-----------------------------------|:------------------------------|:-------------------------------------|
+| Cilk keyword indentation           | `cilk-mode-cc-keywords`       | `cilk-mode-enable-cc-keywords`       |
+| Cilk keyword highlighting          | `cilk-mode-font-lock`         | `cilk-mode-enable-font-lock`         |
+| Flycheck with [OpenCilk][opencilk] | `cilk-mode-flycheck-opencilk` | `cilk-mode-enable-flycheck-opencilk` |
 
+[opencilk]: https://opencilk.org
 
-### Correct indentation with Cilk keywords in CC Mode 
+By default, all features are activated/deactivated together with
+`cilk-mode`.
 
-Toggled with the function `cilk-mode-cc-keywords`.
+  - To explicitly enable, disable, or toggle a feature, use the
+    corresponding function in the table above. The functions do not
+    require `cilk-mode` to be active (but it must be loaded, of course).
+  - To prevent a feature from being automatically enabled in
+    `cilk-mode`, set the corresponding auto-enable variable to `nil`.
 
-| ![](screenshots/cilk-mode-example_cc-off_font-off_flycheck-on.png) | ![](screenshots/cilk-mode-example_cc-on_font-off_flycheck-on.png) |
-|:------------------------------------------------------------------:|:-----------------------------------------------------------------:|
-| in `c-mode`, before `cilk-mode-cc-keywords`                        | after `cilk-mode-cc-keywords`                                     |
+### Correct indentation with Cilk keywords in CC Mode
+
+| ![][png-cilk-kwd-indent-off]                | ![][png-cilk-kwd-indent-on]   |
+|:-------------------------------------------:|:-----------------------------:|
+| in `c-mode`, before `cilk-mode-cc-keywords` | after `cilk-mode-cc-keywords` |
+
+[png-cilk-kwd-indent-off]: screenshots/cilk-mode-example_cc-off_font-off_flycheck-on.png
+[png-cilk-kwd-indent-on]: screenshots/cilk-mode-example_cc-on_font-off_flycheck-on.png
 
 ### Custom font-lock face for Cilk keyword highlighting
 
-Toggled with the function `cilk-mode-font-lock`.  Cilk keywords are fontified
-with the `cilk-mode-parallel-keyword` face.  By default, the latter is the
-same as `font-lock-keyword-face` but can be customized without affecting the
-"regular" C/C++ keywords.
+Cilk keywords are fontified with the `cilk-mode-parallel-keyword` face.
+By default, the latter is the same as `font-lock-keyword-face` but can
+be customized without affecting the "regular" C/C++ keywords.
 
-| ![](screenshots/cilk-mode-example_cc-on_font-off_flycheck-on.png) | ![](screenshots/cilk-mode-example_cc-on_font-on_flycheck-on.png) |
-|:-----------------------------------------------------------------:|:----------------------------------------------------------------:|
-| before `cilk-mode-font-lock`                                      | after `cilk-mode-font-lock`                                      |
+| ![][png-cilk-kwd-highlight-off] | ![][png-cilk-kwd-highlight-on]                |
+|:-------------------------------:|:---------------------------------------------:|
+| before `cilk-mode-font-lock`    | after `cilk-mode-font-lock` (customized face) |
+
+[png-cilk-kwd-highlight-off]: screenshots/cilk-mode-example_cc-on_font-off_flycheck-on.png
+[png-cilk-kwd-highlight-on]: screenshots/cilk-mode-example_cc-on_font-on_flycheck-on.png
 
 ### Flycheck syntax checking with OpenCilk
 
-Toggled with the function `cilk-mode-flycheck-opencilk`.  The path to the
-[OpenCilk](https://opencilk.org) compiler can be set via
-`cilk-mode-flycheck-opencilk-executable`.  This feature requires the
-`flycheck` package and works with the `flycheck-mode` minor mode.
+The path to the [OpenCilk][opencilk] compiler can be customized via the
+variable `cilk-mode-flycheck-opencilk-executable`; its default value is
+`"/opt/opencilk/bin/clang"`. This feature requires the `flycheck` package and
+works with the `flycheck-mode` minor mode.
 
-| ![](screenshots/cilk-mode-example_cc-on_font-on_flycheck-off.png) | ![](screenshots/cilk-mode-example_cc-on_font-on_flycheck-on.png) |
-|:-----------------------------------------------------------------:|:----------------------------------------------------------------:|
-| before `cilk-mode-flycheck-opencilk`                              | after `cilk-mode-flycheck-opencilk`                              |
+| ![][png-cilk-flycheck-off]           | ![][png-cilk-flycheck-on]           |
+|:------------------------------------:|:-----------------------------------:|
+| before `cilk-mode-flycheck-opencilk` | after `cilk-mode-flycheck-opencilk` |
+
+[png-cilk-flycheck-off]: screenshots/cilk-mode-example_cc-on_font-on_flycheck-off.png
+[png-cilk-flycheck-on]: screenshots/cilk-mode-example_cc-on_font-on_flycheck-on.png
 
 
 ## Installation
@@ -64,8 +88,8 @@ Download `cilk-mode.el` and add the following to your `.emacs` file:
 ### MELPA
 
 Users of GNU Emacs (version 24.1 or greater) can install `cilk-mode` via
-[MELPA](https://melpa.org/#/getting-started).  To use the MELPA repository,
-make sure you have the following in your `.emacs` file:
+[MELPA](https://melpa.org/#/cilk-mode). To use the MELPA repository, make sure
+you have the following in your `.emacs` file:
 
 ``` emacs-lisp
 (require 'package)
@@ -74,6 +98,9 @@ make sure you have the following in your `.emacs` file:
 ```
 
 Then, run `M-x package-list-packages` to find and install `cilk-mode`.
+
+For more information, see the [MELPA Getting Started
+Guide](https://melpa.org/#/getting-started).
 
 ### Doom Emacs
 
@@ -99,14 +126,14 @@ In your `.emacs` file:
 ;; automatically enable cilk-mode within c-mode and c++-mode
 (dolist (h '('c-mode-hook 'c++-mode-hook))
   (add-hook h #'cilk-mode))
-  
+
 ;; customize Cilk keyword face
 (set-face-attribute 'cilk-mode-parallel-keyword nil
                     :foreground "#FDA900") ; mustard color
 
 ;; customize path to the OpenCilk compiler (for use with flycheck)
 (setq cilk-mode-opencilk-executable "/opt/opencilk/bin/clang")
-                                                
+
 ;; do not enable flycheck with OpenCilk by default in cilk-mode
 (setq cilk-mode-enable-flycheck-opencilk nil)
 ```
@@ -121,8 +148,8 @@ In `.doom.d/config.el`:
   :config
   (set-face-attribute 'cilk-mode-parallel-keyword nil
                       :foreground "#FDA900") ; mustard color
-  (setq cilk-mode-opencilk-executable "/opt/opencilk/bin/clang"))
-  (setq cilk-mode-enable-flycheck-opencilk nil)
+  (setq cilk-mode-opencilk-executable "/opt/opencilk/bin/clang")
+  (setq cilk-mode-enable-flycheck-opencilk nil))
 
-(add-hook! (c-mode c++-mode) #'cilk-mode)
+(add-hook! '(c-mode c++-mode) #'cilk-mode)
 ```

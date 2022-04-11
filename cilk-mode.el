@@ -174,10 +174,10 @@ will be idempotent even if the BODY is not."
     `(progn
        ;; buffer-local state variable
        (defvar-local ,feature-flag nil
-         ,(concat "Current state of `"
+         ,(concat "Buffer-local state of `"
                   (symbol-name func-name)
-                  "': t=on, nil=off."))
-       ;; toggle-able feature defun
+                  "' (t=on, nil=off)."))
+       ;; toggleable feature defun
        (defun ,func-name (&optional arg)
          ,(concat doc "
 
