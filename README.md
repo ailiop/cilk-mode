@@ -133,9 +133,6 @@ In your `.emacs` file:
 
 ;; customize path to the OpenCilk compiler (for use with flycheck)
 (setq cilk-mode-opencilk-executable "/opt/opencilk/bin/clang")
-
-;; do not enable flycheck with OpenCilk by default in cilk-mode
-(setq cilk-mode-enable-flycheck-opencilk nil)
 ```
 
 ### Doom Emacs
@@ -148,8 +145,7 @@ In `.doom.d/config.el`:
   :config
   (set-face-attribute 'cilk-mode-parallel-keyword nil
                       :foreground "#FDA900") ; mustard color
-  (setq cilk-mode-opencilk-executable "/opt/opencilk/bin/clang")
-  (setq cilk-mode-enable-flycheck-opencilk nil))
+  (setq cilk-mode-opencilk-executable "/opt/opencilk/bin/clang"))
 
 (add-hook! '(c-mode c++-mode) #'cilk-mode)
 ```
