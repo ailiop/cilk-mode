@@ -104,9 +104,13 @@
 (defconst cilk-mode--simple-stmt-kwds '("cilk_sync")
   "Cilk keywords followed by nothing.")
 
+(defconst cilk-mode--hyperobject-kwds '("cilk_reducer")
+  "Cilk keywords for hyperobject declarations.")
+
 (defconst cilk-mode--all-kwds (append cilk-mode--block-stmt-1-kwds
                                       cilk-mode--block-stmt-2-kwds
-                                      cilk-mode--simple-stmt-kwds)
+                                      cilk-mode--simple-stmt-kwds
+                                      cilk-mode--hyperobject-kwds)
   "All Cilk keywords.")
 
 
@@ -219,6 +223,7 @@ o `c-block-stmt-1-key' ==> also keywords in `cilk-mode--block-stmt-1-kwds'
 o `c-block-stmt-2-key' ==> also keywords in `cilk-mode--block-stmt-2-kwds'
 o `c-opt-block-stmt-key' ==> (update based on the 2 variables above)
 o `c-simple-stmt-key' ==> also keywords in `cilk-mode--simple-stmt-kwds'
+o `c-opt-type-modifier-key' ==> also keywords in `cilk-mode--hyperobject-kwds'
 
 This function should only be called from buffers where the major
 mode is `c-mode' or `c++-mode'."
@@ -243,7 +248,12 @@ mode is `c-mode' or `c++-mode'."
         (c-make-keywords-re t
           (append (c-lang-const c-simple-stmt-kwds)
                   (if cilk-mode--cc-keywords-flag
-                      cilk-mode--simple-stmt-kwds)))))
+                      cilk-mode--simple-stmt-kwds))))
+  (setq c-opt-type-modifier-key
+        (c-make-keywords-re t
+          (append (c-lang-const c-type-modifier-kwds)
+                  (if cilk-mode--cc-keywords-flag
+                      cilk-mode--hyperobject-kwds)))))
 
 
 
