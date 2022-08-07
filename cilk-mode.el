@@ -249,9 +249,14 @@ mode is `c-mode' or `c++-mode'."
           (append (c-lang-const c-simple-stmt-kwds)
                   (if cilk-mode--cc-keywords-flag
                       cilk-mode--simple-stmt-kwds))))
-  (setq c-opt-type-modifier-key
+  (setq c-decl-hangon-key
         (c-make-keywords-re t
-          (append (c-lang-const c-type-modifier-kwds)
+          (append (c-lang-const c-decl-hangon-kwds)
+                  (if cilk-mode--cc-keywords-flag
+                      cilk-mode--hyperobject-kwds))))
+  (setq c-paren-nontype-key
+        (c-make-keywords-re t
+          (append (c-lang-const c-paren-nontype-kwds)
                   (if cilk-mode--cc-keywords-flag
                       cilk-mode--hyperobject-kwds)))))
 
