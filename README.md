@@ -61,10 +61,9 @@ be customized without affecting the "regular" C/C++ keywords.
 
 ### Flycheck syntax checking with OpenCilk
 
-The path to the [OpenCilk][opencilk] compiler can be customized via the
-variable `cilk-mode-flycheck-opencilk-executable`; its default value is
-`"/opt/opencilk/bin/clang"`. This feature requires the `flycheck` package and
-works with the `flycheck-mode` minor mode.
+The path to the [OpenCilk][opencilk] compiler is set in
+`cilk-mode-flycheck-opencilk-executable`. This feature requires the `flycheck`
+package and works with the `flycheck-mode` minor mode.
 
 | ![][png-cilk-flycheck-off]           | ![][png-cilk-flycheck-on]           |
 |:------------------------------------:|:-----------------------------------:|
@@ -132,7 +131,7 @@ In your `.emacs` file:
                     :foreground "#FDA900") ; mustard color
 
 ;; customize path to the OpenCilk compiler (for use with flycheck)
-(setq cilk-mode-opencilk-executable "/opt/opencilk/bin/clang")
+(setq cilk-mode-opencilk-executable "/opt/opencilk-2/bin/clang")
 ```
 
 ### Doom Emacs
@@ -145,7 +144,7 @@ In `.doom.d/config.el`:
   :config
   (set-face-attribute 'cilk-mode-parallel-keyword nil
                       :foreground "#FDA900") ; mustard color
-  (setq cilk-mode-opencilk-executable "/opt/opencilk/bin/clang"))
+  (setq cilk-mode-opencilk-executable "/opt/opencilk-2/bin/clang"))
 
 (add-hook! '(c-mode c++-mode) #'cilk-mode)
 ```

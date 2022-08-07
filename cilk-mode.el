@@ -116,7 +116,7 @@
 
 ;; ---------- OpenCilk
 
-(defcustom cilk-mode-opencilk-executable "/opt/opencilk/bin/clang"
+(defcustom cilk-mode-opencilk-executable "/opt/opencilk-2/bin/clang"
   "Path to the OpenCilk compiler executable.
 
 This is used as the syntax checker for flycheck."
